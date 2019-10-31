@@ -1,11 +1,6 @@
 require "test_helper"
 
 class DiaryEntryTest < ActiveSupport::TestCase
-  def setup
-    # Create the default language for diary entries
-    create(:language, :code => "en")
-  end
-
   def test_diary_entry_validations
     diary_entry_valid({})
     diary_entry_valid({ :title => "" }, false)

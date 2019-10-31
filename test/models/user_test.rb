@@ -208,16 +208,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_languages
-    create(:language, :code => "en")
-    create(:language, :code => "de")
-    create(:language, :code => "sl")
-
     user = create(:user, :languages => ["en"])
     assert_equal ["en"], user.languages
     user.languages = %w[de fr en]
     assert_equal %w[de fr en], user.languages
     user.languages = %w[fr de sl]
-    assert_equal "de", user.preferred_language
+    assert_equal "fr", user.preferred_language
     assert_equal %w[fr de sl], user.preferred_languages.map(&:to_s)
     user = create(:user, :languages => %w[en de])
     assert_equal %w[en de], user.languages

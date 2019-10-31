@@ -5,8 +5,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
 
   def setup
     super
-    # Create the default language for diary entries
-    create(:language, :code => "en")
     # Stub nominatim response for diary entry locations
     stub_request(:get, %r{^https://nominatim\.openstreetmap\.org/reverse\?})
       .to_return(:status => 404)
@@ -195,7 +193,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   end
 
   def test_create_german
-    create(:language, :code => "de")
     user = create(:user)
 
     # Now try creating a diary entry in a different language
@@ -564,8 +561,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   end
 
   def test_index_language
-    create(:language, :code => "de")
-    create(:language, :code => "sl")
     diary_entry_en = create(:diary_entry, :language_code => "en")
     diary_entry_en2 = create(:diary_entry, :language_code => "en")
     diary_entry_de = create(:diary_entry, :language_code => "de")
@@ -599,7 +594,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   end
 
   def test_rss
-    create(:language, :code => "de")
     create(:diary_entry, :language_code => "en")
     create(:diary_entry, :language_code => "en")
     create(:diary_entry, :language_code => "de")
@@ -616,7 +610,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   end
 
   def test_rss_language
-    create(:language, :code => "de")
     create(:diary_entry, :language_code => "en")
     create(:diary_entry, :language_code => "en")
     create(:diary_entry, :language_code => "de")
@@ -632,7 +625,6 @@ class DiaryEntriesControllerTest < ActionController::TestCase
   #  end
 
   def test_rss_language_with_no_entries
-    create(:language, :code => "sl")
     create(:diary_entry, :language_code => "en")
 
     get :rss, :params => { :language => "sl", :format => :rss }

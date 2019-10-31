@@ -10,7 +10,6 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_reported_user
-    create(:language, :code => "en")
     user = create(:user)
     note = create(:note_comment, :author => create(:user)).note
     anonymous_note = create(:note_comment, :author => nil).note
