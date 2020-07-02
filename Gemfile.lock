@@ -166,7 +166,7 @@ GEM
     cucumber-tag_expressions (1.1.1)
     cucumber-wire (0.0.1)
     dalli (2.7.10)
-    database_cleaner (1.8.4)
+    database_cleaner (1.8.5)
     debug_inspector (0.0.3)
     deep_merge (1.2.1)
     delayed_job (4.1.8)
