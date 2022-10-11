@@ -34,6 +34,17 @@ CREATE TYPE public.community_member_role_enum AS ENUM (
 
 
 --
+-- Name: event_attendances_intention_enum; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.event_attendances_intention_enum AS ENUM (
+    'Maybe',
+    'No',
+    'Yes'
+);
+
+
+--
 -- Name: format_enum; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -910,6 +921,39 @@ CREATE TABLE public.diary_entry_subscriptions (
     user_id bigint NOT NULL,
     diary_entry_id bigint NOT NULL
 );
+
+
+--
+-- Name: event_attendances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.event_attendances (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    event_id bigint NOT NULL,
+    intention public.event_attendances_intention_enum NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: event_attendances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.event_attendances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_attendances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.event_attendances_id_seq OWNED BY public.event_attendances.id;
 
 
 --
@@ -2018,6 +2062,13 @@ ALTER TABLE ONLY public.diary_entries ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: event_attendances id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_attendances ALTER COLUMN id SET DEFAULT nextval('public.event_attendances_id_seq'::regclass);
+
+
+--
 -- Name: event_organizers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2368,6 +2419,14 @@ ALTER TABLE ONLY public.diary_entries
 
 ALTER TABLE ONLY public.diary_entry_subscriptions
     ADD CONSTRAINT diary_entry_subscriptions_pkey PRIMARY KEY (user_id, diary_entry_id);
+
+
+--
+-- Name: event_attendances event_attendances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_attendances
+    ADD CONSTRAINT event_attendances_pkey PRIMARY KEY (id);
 
 
 --
@@ -2955,6 +3014,27 @@ CREATE INDEX index_community_members_on_user_id ON public.community_members USIN
 --
 
 CREATE INDEX index_diary_entry_subscriptions_on_diary_entry_id ON public.diary_entry_subscriptions USING btree (diary_entry_id);
+
+
+--
+-- Name: index_event_attendances_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_attendances_on_event_id ON public.event_attendances USING btree (event_id);
+
+
+--
+-- Name: index_event_attendances_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_attendances_on_user_id ON public.event_attendances USING btree (user_id);
+
+
+--
+-- Name: index_event_attendances_on_user_id_and_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_event_attendances_on_user_id_and_event_id ON public.event_attendances USING btree (user_id, event_id);
 
 
 --
@@ -3594,6 +3674,14 @@ ALTER TABLE ONLY public.user_mutes
 
 
 --
+-- Name: event_attendances fk_rails_64ad6920ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_attendances
+    ADD CONSTRAINT fk_rails_64ad6920ae FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: oauth_access_tokens fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3663,6 +3751,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 ALTER TABLE ONLY public.oauth_applications
     ADD CONSTRAINT fk_rails_cc886e315a FOREIGN KEY (owner_id) REFERENCES public.users(id) NOT VALID;
+
+
+--
+-- Name: event_attendances fk_rails_d082d0d206; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_attendances
+    ADD CONSTRAINT fk_rails_d082d0d206 FOREIGN KEY (event_id) REFERENCES public.events(id);
 
 
 --
@@ -4028,6 +4124,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('23'),
 ('22'),
 ('21'),
+('20240730234421'),
 ('20240728224134'),
 ('20240728144036'),
 ('20240618193051'),
