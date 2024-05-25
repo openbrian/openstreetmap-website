@@ -348,11 +348,14 @@ OpenStreetMap::Application.routes.draw do
   resources :communities do
     resources :community_links, :only => [:create, :index, :new]
     get :community_members, :to => "community_members#index"
+    get :community_events, :to => "events#index"
+    resources :events, :only => [:show]
   end
   post "/communities/:id/step_up" => "communities#step_up", :as => :step_up, :id => /\d+/
   resources :community_links, :only => [:destroy, :edit, :update]
   resources :community_members, :only => [:create, :destroy, :edit, :new, :update]
   get "/community_members" => "community_members#create", :as => "login_to_join"
+  resources :events
 
   # errors
   match "/400", :to => "errors#bad_request", :via => :all
