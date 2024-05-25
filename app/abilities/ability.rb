@@ -63,6 +63,8 @@ class Ability
         can [:create, :destroy], CommunityMember, :user_id => user.id
         can [:destroy, :edit, :update], CommunityMember, :community => user_is_community_organizer
         can [:create, :edit, :new, :update], Event, :community => user_is_community_organizer
+        can [:create], EventAttendance
+        can [:update], EventAttendance, :user_id => user.id
         can [:close, :reopen], Note
         can [:show, :edit, :update], :preference
         can [:edit, :update], :profile
