@@ -26,6 +26,7 @@
 class Event < ApplicationRecord
   belongs_to :community
   has_many :event_organizers
+  has_many :event_attendances
 
   scope :future, -> { where(:moment => Time.now.utc..) }
   scope :past, -> { where(:moment => ...Time.now.utc) }
@@ -62,5 +63,21 @@ class Event < ApplicationRecord
 
   def past?
     moment < Time.now.utc
+  end
+
+  def attendees(intention)
+    EventAttendance.where(:event_id => id, :intention => intention)
+  end
+
+  def yes_attendees
+    attendees(EventAttendance::Intentions::YES)
+  end
+
+  def no_attendees
+    attendees(EventAttendance::Intentions::NO)
+  end
+
+  def maybe_attendees
+    attendees(EventAttendance::Intentions::MAYBE)
   end
 end
